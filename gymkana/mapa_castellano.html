@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Mapa interactivo</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        /* Style for the banner */
+        #banner {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 20px;
+        }
+
+        /* Style for the map container */
+        #map {
+            height: calc(100% - 50px);
+            width: 100%;
+        }
+
+        .popup-content {
+            cursor: pointer;
+        }
+
+        .popup-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Banner with Title as a clickable link -->
+    <div id="banner">
+        <a href="mapa_euskara.html" style="color: white; text-decoration: none;">
+            <h1>Mapa interactivo</h1>
+        </a>
+    </div>
+
+    <!-- Map container -->
+    <div id="map"></div>
+
+    <script>
+        // Initialize map with the starting coordinates and zoom level
+        const map = L.map('map').setView([43.262808, -2.936938], 13);
+
+        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        let locationMarker = null;  // To store the marker, if any.
+
+        // When location is found, add a marker without changing the map view
+        function onLocationFound(e) {
+            // If a marker already exists, remove it
+            if (locationMarker) {
+                map.removeLayer(locationMarker);
+            }
+
+            // Show a new marker at the user's location
+            locationMarker = L.marker(e.latlng).addTo(map);
+        }
+
+        // Do nothing when location is not found
+        function onLocationError(e) {
+            // No action when location is not found
+        }
+
+        // Initial location attempt
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+
+        // Start locating the user with 'watch: true', which automatically keeps tracking the location
+        map.locate({ watch: true });
+
+        // GeoJSON points with custom properties
+        const geojsonData = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-2.936938, 43.262808]  // Initial point
+                    },
+                    "properties": {
+                        "title": "Punto inicial",
+                        "description": "Descripción corta 1",
+                        "extra": "Descripción corta 2",
+                        "url": "prueba1.html",  // Subpage URL
+                        "icon": "../assets/icon.png"  // Path to the image in the assets folder
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-2.931938, 43.262808]  // Slightly to the right
+                    },
+                    "properties": {
+                        "title": "Punto desplazado",
+                        "description": "Descripción corta 2",
+                        "extra": "Descripción corta 3",
+                        "url": "prueba1.html",  // Subpage URL
+                        "icon": "../assets/icon.png"  // Path to the image in the assets folder
+                    }
+                }
+            ]
+        };
+
+        // Add GeoJSON layer to the map
+        L.geoJSON(geojsonData, {
+            onEachFeature: function (feature, layer) {
+                // Create a popup with title, description, extra description with image icon
+                const popupContent = `
+                    <div class="popup-content">
+                        <strong>${feature.properties.title}</strong><br>
+                        ${feature.properties.description}<br>
+                        <img class="popup-icon" src="${feature.properties.icon}" alt="Icon" />
+                        ${feature.properties.extra}
+                    </div>
+                `;
+
+                // Bind the popup to the layer
+                layer.bindPopup(popupContent);
+
+                // Add event listener to the popup content (for redirection)
+                layer.on('popupopen', function () {
+                    const popupElement = document.querySelector('.leaflet-popup-content');
+                    if (popupElement) {
+                        popupElement.addEventListener('click', function () {
+                            // Redirect when any part of the popup content is clicked
+                            window.location.href = feature.properties.url;
+                        });
+                    }
+                });
+            },
+            // Use pointToLayer to create circle markers with the orange color
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, {
+                    radius: 8,
+                    fillColor: '#ff7800',  // Orange color
+                    color: '#000',  // Black border
+                    weight: 1,  // Border width
+                    opacity: 1,  // Border opacity
+                    fillOpacity: 0.8  // Fill opacity
+                });
+            }
+        }).addTo(map);
+    </script>
+
+</body>
+
+</html>
