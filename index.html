@@ -63,7 +63,7 @@
             const radius = e.accuracy / 2;
 
             const locationMarker = L.marker(e.latlng).addTo(map)
-                .bindPopup(`You are within ${radius} meters from this point`).openPopup();
+                .bindPopup(`Puntu honetatik ${radius} metrotara zaude`).openPopup();
 
             const locationCircle = L.circle(e.latlng, radius).addTo(map);
         }
