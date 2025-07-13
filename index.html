@@ -3,17 +3,31 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Redirecting...</title>
-    <script>
-        // Get current URL parameters
-        const params = window.location.search;
-        // Redirect to the new URL with the same parameters
-        window.location.href = 'https://script.google.com/macros/s/AKfycbyLAaQnIAjQqmKLoMfSorM9OSrrQkJWvTsznLZ73cwgD0vCp2S0MDwxJGINtjZb-bep/exec' + params;
-    </script>
+    <title>App ENEF 2025</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
-    <p>Redirecting...</p>
+    <iframe id="appFrame" src=""></iframe>
+    <script>
+        // Get query params from current URL
+        const params = window.location.search;
+        // Set iframe src to your Apps Script app
+        const iframeSrc = "https://script.google.com/macros/s/AKfycbyLAaQnIAjQqmKLoMfSorM9OSrrQkJWvTsznLZ73cwgD0vCp2S0MDwxJGINtjZb-bep/exec" + params;
+        document.getElementById("appFrame").src = iframeSrc;
+    </script>
 </body>
 
 </html>
