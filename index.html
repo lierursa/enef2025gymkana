@@ -1,42 +1,19 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-<<<<<<< HEAD
     <title>App ENEF 2025</title>
-    <style>
-        html,
-        body {
-            margin: 0;
-            height: 100%;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
+    <script>
+        // Get current URL parameters
+        const params = window.location.search;
+        // Redirect to the new URL with the same parameters
+        window.location.href = 'https://script.google.com/macros/s/AKfycbyLAaQnIAjQqmKLoMfSorM9OSrrQkJWvTsznLZ73cwgD0vCp2S0MDwxJGINtjZb-bep/exec' + params;
+    </script>
 </head>
 
 <body>
-    <iframe id="appFrame" src=""></iframe>
-    <script>
-        // Get query params from current URL
-        const params = window.location.search;
-        // Set iframe src to your Apps Script app
-        const iframeSrc = "https://script.google.com/macros/s/AKfycbyLAaQnIAjQqmKLoMfSorM9OSrrQkJWvTsznLZ73cwgD0vCp2S0MDwxJGINtjZb-bep/exec" + params;
-        document.getElementById("appFrame").src = iframeSrc;
-    </script>
+    <p>Redirecting...</p>
 </body>
-=======
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=https://www.enef2025.eus/gymkana/">
-    <title>ENEF 2025</title>
-</head>
-
-<body></body>
->>>>>>> parent of b80836b (Redirection)
 
 </html>
